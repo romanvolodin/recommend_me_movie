@@ -1,4 +1,7 @@
 import argparse
+from distutils.util import strtobool
+import json
+import os
 
 from environs import Env
 import requests
@@ -13,7 +16,20 @@ def parse_arguments():
         'movie_title',
         help = 'Movie title for recommendations',
     )
+    parser.add_argument(
+        '--db-path',
+        help = 'Path to movie DB json',
+        default = 'movie-db.json',
+    )
     return parser.parse_args()
+
+
+def load_data(filepath):
+    try:
+        with open(filepath, 'r', encoding='utf-8') as json_file:
+            return json.load(json_file)
+    except json.decoder.JSONDecodeError:
+        return
 
 
 def fetch_random_movies(num=10):
@@ -41,11 +57,36 @@ if __name__ == "__main__":
     language = env.str("RMM_LANGUAGE")
 
     args = parse_arguments()
+    movie_title = args.movie_title
+    movie_db_path = args.db_path
 
     payload = {
         "api_key": api_key,
         "language": language,
-        "query": args.movie_title,
     }
-    response = requests.get(f"{TMDB_API_URL}/search/movie", params=payload, timeout=10)
-    print(response.json())
+
+    if not os.path.exists(movie_db_path):
+        print(movie_db_path, "not found.")
+        download_now = input(
+            f"Download movies data from The Movie DB save it as {movie_db_path}? [y/n] "
+        ).strip()
+        if not strtobool(download_now):
+            exit()
+        try:
+            number_of_movies = int(
+                input("How many movies to download? (1 - 1000) ")
+            )
+        except ValueError:
+            exit("Can't parse a number.")
+        movies = fetch_random_movies(number_of_movies)
+        with open(movie_db_path, 'w', encoding='utf-8') as f:
+            json.dump(movies, f, ensure_ascii=False, separators=(',', ':'))
+
+    try:
+        movies_data = load_data(movie_db_path)
+    except PermissionError as err:
+        exit(err)
+
+    if movies_data is None:
+        exit(f'Error: Can\'t read {movie_db_path}. '
+             f'Make sure the file contains a json data')
