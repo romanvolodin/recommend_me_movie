@@ -9,9 +9,9 @@ if __name__ == "__main__":
     env = Env()
     env.read_env() 
 
-    api_token = env.str("RMM_API_TOKEN")
+    api_key = env.str("RMM_API_KEY")
     payload = {
-        "api_key": api_token,
+        "api_key": api_key,
         "language": "ru-RU",
         "query": "Terminator",
     }

@@ -13,12 +13,12 @@
 
 Доступные переменные:
 
-- `RMM_API_TOKEN` — ключ для доступа к API The Movie Database. Подробная инструкция [как получить ключ](https://developers.themoviedb.org/3/getting-started/introduction).
+- `RMM_API_KEY` — ключ для доступа к API The Movie Database. Подробная инструкция [как получить ключ](https://developers.themoviedb.org/3/getting-started/introduction).
 
 Пример:
 
 ```env
-RMM_API_TOKEN = e6be2438b008ef8093630b28
+RMM_API_KEY = e6be2438b008ef8093630b28
 ```
 
 ## Запуск
