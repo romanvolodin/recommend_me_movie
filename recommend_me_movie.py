@@ -38,12 +38,13 @@ if __name__ == "__main__":
     env.read_env() 
 
     api_key = env.str("RMM_API_KEY")
+    language = env.str("RMM_LANGUAGE")
 
     args = parse_arguments()
 
     payload = {
         "api_key": api_key,
-        "language": "ru-RU",
+        "language": language,
         "query": args.movie_title,
     }
     response = requests.get(f"{TMDB_API_URL}/search/movie", params=payload, timeout=10)
