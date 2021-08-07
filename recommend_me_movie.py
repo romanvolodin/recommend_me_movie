@@ -16,6 +16,23 @@ def parse_arguments():
     return parser.parse_args()
 
 
+def fetch_random_movies(num=10):
+    import random
+    movies = []
+    used_ids = []
+    while True:
+        random_id = random.randint(0, 100000)
+        if random_id in used_ids:
+            continue
+        movie = requests.get(f"{TMDB_API_URL}/movie/{random_id}", params=payload, timeout=5)
+        if movie.status_code == 200:
+            movies.append(movie.json())
+            used_ids.append(random_id)
+        if len(movies) >= num:
+            break
+    return movies
+
+
 if __name__ == "__main__":
     env = Env()
     env.read_env() 
