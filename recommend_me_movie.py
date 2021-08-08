@@ -39,27 +39,27 @@ def load_data(filepath):
 
 
 def fetch_movie(movie_id):
-    request = requests.get(
+    response = requests.get(
         f"{TMDB_API_URL}/movie/{movie_id}", params=payload, timeout=5
     )
-    if request.status_code == 200:
-        return request.json()
+    if response.status_code == 200:
+        return response.json()
 
 
 def fetch_movie_keywords(movie_id):
-    request = requests.get(
+    response = requests.get(
         f"{TMDB_API_URL}/movie/{movie_id}/keywords", params=payload, timeout=5
     )
-    if request.status_code == 200:
-        return request.json()["keywords"]
+    if response.status_code == 200:
+        return response.json()["keywords"]
 
 
 def fetch_movie_lists(movie_id):
-    request = requests.get(
+    response = requests.get(
         f"{TMDB_API_URL}/movie/{movie_id}/lists", params=payload, timeout=5
     )
-    if request.status_code == 200:
-        return request.json()["results"]
+    if response.status_code == 200:
+        return response.json()["results"]
 
 
 def fetch_random_movies(movie_count=10):
