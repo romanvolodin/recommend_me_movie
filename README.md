@@ -4,8 +4,10 @@
 
 ## Требования
 
-Для запуска нужен Python 3.6 или выше.  
-Также потребуется ключ для доступа к API [The Movie Database](https://www.themoviedb.org/). Подробная инструкция [как получить ключ](https://developers.themoviedb.org/3/getting-started/introduction).
+- Python 3.7 или выше.  
+- База данных фильмов в json формате.  
+
+Если базы нет, скрипт сам предложит скачать данные о фильмах. Для этого потребуется настроить переменные откружения.
 
 ## Переменные окружения
 
@@ -34,12 +36,17 @@ pip install -r requirements.txt
 Запустите скрипт:
 
 ```sh
-python recommend_me_movie.py Terminator
+python recommend_me_movie.py "Я, робот"
 ```
 
 Пример вывода:
 ```sh
-
+$ python recommend_me_movie.py "Я, робот"
+Особое мнение
+Прометей
+Индиана Джонс и Королевство хрустального черепа
+Рэмбо: Первая Кровь
+Сотовый
 ```
 
 ## Цели проекта
