@@ -32,20 +32,58 @@ def load_data(filepath):
         return
 
 
-def fetch_random_movies(num=10):
+def fetch_movie(movie_id):
+    request = requests.get(
+        f"{TMDB_API_URL}/movie/{movie_id}", params=payload, timeout=5
+    )
+    if request.status_code == 200:
+        return request.json()
+
+
+def fetch_movie_keywords(movie_id):
+    request = requests.get(
+        f"{TMDB_API_URL}/movie/{movie_id}/keywords", params=payload, timeout=5
+    )
+    if request.status_code == 200:
+        return request.json()["keywords"]
+
+
+def fetch_movie_lists(movie_id):
+    request = requests.get(
+        f"{TMDB_API_URL}/movie/{movie_id}/lists", params=payload, timeout=5
+    )
+    if request.status_code == 200:
+        return request.json()["results"]
+
+
+def fetch_random_movies(movie_count=10):
     import random
     movies = []
     used_ids = []
     while True:
+        if len(movies) >= movie_count:
+            break
+
         random_id = random.randint(0, 100000)
         if random_id in used_ids:
             continue
-        movie = requests.get(f"{TMDB_API_URL}/movie/{random_id}", params=payload, timeout=5)
-        if movie.status_code == 200:
-            movies.append(movie.json())
-            used_ids.append(random_id)
-        if len(movies) >= num:
-            break
+        
+        movie = fetch_movie(random_id)
+        if movie is None:
+            continue
+
+        movie_keywords = fetch_movie_keywords(random_id)
+        movie["keywords"] = []
+        if movie_keywords:
+            movie["keywords"] = movie_keywords
+
+        movie_lists = fetch_movie_lists(random_id)
+        movie["lists"] = []
+        if movie_lists:
+            movie["lists"] = movie_lists
+
+        movies.append(movie)
+        used_ids.append(random_id)
     return movies
 
 
