@@ -21,6 +21,12 @@ def parse_arguments():
         help = 'Path to movie DB json',
         default = 'movie-db.json',
     )
+    parser.add_argument(
+        '--count',
+        help = 'Movie count to recommend',
+        type = int,
+        default = 5,
+    )
     return parser.parse_args()
 
 
@@ -136,6 +142,7 @@ if __name__ == "__main__":
     args = parse_arguments()
     movie_title = args.movie_title
     movie_db_path = args.db_path
+    count = args.count
 
     payload = {
         "api_key": api_key,
@@ -171,7 +178,7 @@ if __name__ == "__main__":
     sample_movie = find_movie_by_title(movie_title, movies_data)
 
     if sample_movie is not None:
-        recommended_movies = recommend_movies(sample_movie, movies_data, 5)
+        recommended_movies = recommend_movies(sample_movie, movies_data, count)
 
     if recommended_movies:
         for recommended_movie in recommended_movies.values():
