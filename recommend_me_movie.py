@@ -87,6 +87,16 @@ def fetch_random_movies(movie_count=10):
     return movies
 
 
+def find_movie_by_title(title, movies_data):
+    try:
+        sample_movie = [
+            movie for movie in movies_data
+            if movie_title.lower() == movie['title'].lower()
+        ][0]
+        return sample_movie
+    except IndexError:
+        return
+
 if __name__ == "__main__":
     env = Env()
     env.read_env() 
@@ -128,3 +138,8 @@ if __name__ == "__main__":
     if movies_data is None:
         exit(f'Error: Can\'t read {movie_db_path}. '
              f'Make sure the file contains a json data')
+    
+    sample_movie = find_movie_by_title(movie_title, movies_data)
+    
+    if sample_movie is not None:
+        print(sample_movie)
