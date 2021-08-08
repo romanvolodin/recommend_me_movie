@@ -97,6 +97,35 @@ def find_movie_by_title(title, movies_data):
     except IndexError:
         return
 
+
+def recommend_movies(sample_movie, movies_data, movie_count=10):
+    recommended_movies = {}
+    for movie in movies_data:
+        if movie == sample_movie:
+            continue
+
+        recommendation_weight = 0
+
+        for genre in movie['genres']:
+            if genre in sample_movie['genres']:
+                recommendation_weight += 1
+
+        for keyword in movie['keywords']:
+            if keyword in sample_movie['keywords']:
+                recommendation_weight += 1
+
+        for playlist in movie['lists']:
+            if playlist in sample_movie['lists']:
+                recommendation_weight += 1
+
+        if recommendation_weight > 0:
+            recommended_movies[recommendation_weight] = movie
+
+    recommended_movies = dict(reversed(sorted(recommended_movies.items())))
+
+    return dict(list(recommended_movies.items())[:movie_count])
+
+
 if __name__ == "__main__":
     env = Env()
     env.read_env() 
@@ -140,6 +169,13 @@ if __name__ == "__main__":
              f'Make sure the file contains a json data')
     
     sample_movie = find_movie_by_title(movie_title, movies_data)
-    
+
     if sample_movie is not None:
-        print(sample_movie)
+        recommended_movies = recommend_movies(sample_movie, movies_data, 5)
+
+    if recommended_movies:
+        for recommended_movie in recommended_movies.values():
+            print(recommended_movie['title'])
+
+    else:
+        print('Sorry, can\'t find any movie. Try different movie title.')
