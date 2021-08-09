@@ -180,9 +180,8 @@ if __name__ == "__main__":
     if sample_movie is not None:
         recommended_movies = recommend_movies(sample_movie, movies_data, count)
 
-    if recommended_movies:
-        for recommended_movie in recommended_movies.values():
-            print(recommended_movie['title'])
+    if not recommended_movies:
+        exit('Sorry, can\'t find any movie. Try different movie title.')
 
-    else:
-        print('Sorry, can\'t find any movie. Try different movie title.')
+    for recommended_movie in recommended_movies.values():
+        print(recommended_movie['title'])
