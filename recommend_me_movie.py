@@ -97,7 +97,7 @@ def find_movie_by_title(title, movies_data):
     try:
         sample_movie = [
             movie for movie in movies_data
-            if movie_title.lower() == movie['title'].lower()
+            if title.lower() == movie['title'].lower()
         ][0]
         return sample_movie
     except IndexError:
